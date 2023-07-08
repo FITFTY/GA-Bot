@@ -19,7 +19,7 @@ def getTodayDAU():
         metrics=[
             Metric(name="activeUsers")
             ],
-        date_ranges=[DateRange(start_date="1daysAgo", end_date="today")],
+        date_ranges=[DateRange(start_date="today", end_date="today")],
     )
 
     response = client.run_report(request)
@@ -42,7 +42,7 @@ def getYesterdayDAU():
         metrics=[
             Metric(name="activeUsers")
             ],
-        date_ranges=[DateRange(start_date="2daysAgo", end_date="1daysAgo")],
+        date_ranges=[DateRange(start_date="1daysAgo", end_date="1daysAgo")],
     )
 
     response = client.run_report(request)
@@ -53,7 +53,7 @@ def getYesterdayDAU():
     return dau
 
 
-def getTodayMAU():
+def getYesterdayMAU():
     client = BetaAnalyticsDataClient()
 
     today = date.today()
@@ -80,7 +80,7 @@ def getTodayMAU():
      
     return mau
 
-def getYesterdayMAU():
+def getTodayMAU():
     client = BetaAnalyticsDataClient()
 
     today = date.today()
@@ -106,3 +106,63 @@ def getYesterdayMAU():
      
     return mau
 
+
+def getTodayAverageSessionDuration():
+    client = BetaAnalyticsDataClient()
+    request = RunReportRequest(
+        property=secret.GA_property,
+        # 측정기준
+        dimensions=[
+            Dimension(name="unifiedScreenClass")
+        ],
+        # 측정항목
+        metrics=[
+           Metric(name="averageSessionDuration")
+        ],
+        date_ranges=[DateRange(start_date="today", end_date="today")],
+    )
+
+    response = client.run_report(request)
+    
+    message = ""
+    for row in response.rows:
+        if row.dimension_values[0].value == "MainViewController":
+            message += f"  당일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
+        if row.dimension_values[0].value == "SettingViewController":
+            message += f"  당일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
+    if message == "":
+        return (
+            "  당일 메인화면 평균 체류시간: 0분 0초\n"
+            "  당일 설정화면 평균 체류시간: 0분 0초\n"
+        )
+    return message
+
+def getYesterdayAverageSessionDuration():
+    client = BetaAnalyticsDataClient()
+    request = RunReportRequest(
+        property=secret.GA_property,
+        # 측정기준
+        dimensions=[
+            Dimension(name="unifiedScreenClass")
+        ],
+        # 측정항목
+        metrics=[
+           Metric(name="averageSessionDuration")
+        ],
+        date_ranges=[DateRange(start_date="1daysAgo", end_date="1daysAgo")],
+    )
+
+    response = client.run_report(request)
+    message = ""
+    for row in response.rows:
+        if row.dimension_values[0].value == "MainViewController":
+            message += f"  전일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
+        if row.dimension_values[0].value == "SettingViewController":
+            message += f"  전일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
+    return message
+
+
+def convertMinutes(value):
+    num = int(float(value))
+    return f"{num//60}분 {num%60}초"
+   

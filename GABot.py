@@ -36,18 +36,21 @@ async def send_message_8am():
 def message_yesterday_data():
       today = datetime.date.today()
       yesterday = today - timedelta(days=1)
-      message = ("================\n"
+      message = ("===========================================\n"
                        f"{yesterday} 기준\n\n"
-                f"  당일 DAU {GA.getYesterdayDAU()}\n"
-                f"  당월 MAU {GA.getYesterdayMAU()}\n"
-                "================\n")
+                f"  전일 DAU: {GA.getYesterdayDAU()}\n"
+                f"  전월 누적 MAU: {GA.getYesterdayMAU()}\n"
+                f"{GA.getYesterdayAverageSessionDuration()}\n"
+                ""
+                "===========================================\n")
       return message
       
 def message_today_data():
-      message = ("================\n"
-                f"  당일 DAU {GA.getTodayDAU()}\n"
-                f"  당월 MAU {GA.getTodayMAU()}\n"
-                "================\n")
+      message = ("===========================================\n"
+                f"  당일 DAU: {GA.getTodayDAU()}\n"
+                f"  당월 누적 MAU: {GA.getTodayMAU()}\n"
+                f"{GA.getTodayAverageSessionDuration()}\n"
+                "===========================================\n")
       return message
 
 bot.run(secret.bot_token)
