@@ -28,7 +28,7 @@ async def on_message(message):
 @tasks.loop(seconds=1)
 async def send_message_8am():
      now = datetime.datetime.now()
-     if now.hour == 18 and now.minute == 55 and now.second == 0:
+     if now.hour == 8 and now.minute == 0 and now.second == 0:
             await bot.get_guild(secret.bot_server_id).get_channel(secret.bot_channel_id).send(message_yesterday_data())
             time.sleep(1) 
 
