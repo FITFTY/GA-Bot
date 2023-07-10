@@ -1,8 +1,8 @@
-import asyncio
 import discord
 from discord.ext import commands
 from discord.ext import tasks
 import GA
+import totalUser
 import datetime, time
 from datetime import timedelta
 import secret
@@ -46,10 +46,14 @@ def message_yesterday_data():
       return message
       
 def message_today_data():
+      userList = totalUser.getTotalUser()
       message = ("===========================================\n"
                 f"  당일 DAU: {GA.getTodayDAU()}\n"
                 f"  당월 누적 MAU: {GA.getTodayMAU()}\n"
                 f"{GA.getTodayAverageSessionDuration()}\n"
+                f"  누적 가입자수: {userList['totalUser']}\n"
+                f"  누적 여성 가입자수: {userList['totalFemaleUser']}\n"
+                f"  누적 남성 가입자수: {userList['totalMaleUser']}\n"
                 "===========================================\n")
       return message
 
