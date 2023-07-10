@@ -36,12 +36,15 @@ async def send_message_8am():
 def message_yesterday_data():
       today = datetime.date.today()
       yesterday = today - timedelta(days=1)
+      userList = totalUser.getTotalUser()
       message = ("===========================================\n"
                        f"{yesterday} 기준\n\n"
                 f"  전일 DAU: {GA.getYesterdayDAU()}\n"
                 f"  전월 누적 MAU: {GA.getYesterdayMAU()}\n"
                 f"{GA.getYesterdayAverageSessionDuration()}\n"
-                ""
+                f"  누적 가입자수: {userList['totalUser']}\n"
+                f"  누적 여성 가입자수: {userList['totalFemaleUser']}\n"
+                f"  누적 남성 가입자수: {userList['totalMaleUser']}\n"
                 "===========================================\n")
       return message
       
