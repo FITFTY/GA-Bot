@@ -1,4 +1,4 @@
-from google.analytics.data_v1beta.types import DateRange, Metric, Dimension, RunReportRequest
+from google.analytics.data_v1beta.types import DateRange, Metric, Dimension, RunReportRequest, RunRealtimeReportRequest
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from datetime import datetime, date
 from datetime import timedelta
@@ -9,7 +9,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
 def getTodayDAU():
     client = BetaAnalyticsDataClient()
 
-    request = RunReportRequest(
+    request = RunRealtimeReportRequest(
         property=secret.GA_property,
         # 측정기준
         dimensions=[
@@ -18,11 +18,10 @@ def getTodayDAU():
         # 측정항목
         metrics=[
             Metric(name="activeUsers")
-            ],
-        date_ranges=[DateRange(start_date="today", end_date="today")],
+        ]
     )
 
-    response = client.run_report(request)
+    response = client.run_realtime_report(request)
     dau = 0
     for row in response.rows:
         dau = row.metric_values[0].value
@@ -124,18 +123,14 @@ def getTodayAverageSessionDuration():
 
     response = client.run_report(request)
     
-    message = ""
+    mainVC_time = "당일 메인화면 평균 체류시간: 0분 0초\n"
+    settingVC_time = "당일 설정화면 평균 체류시간: 0분 0초\n"
     for row in response.rows:
         if row.dimension_values[0].value == "MainViewController":
-            message += f"  당일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
+            mainVC_time = f"  당일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
         if row.dimension_values[0].value == "SettingViewController":
-            message += f"  당일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
-    if message == "":
-        return (
-            "  당일 메인화면 평균 체류시간: 0분 0초\n"
-            "  당일 설정화면 평균 체류시간: 0분 0초\n"
-        )
-    return message
+            settingVC_time = f"  당일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
+    return mainVC_time + settingVC_time
 
 def getYesterdayAverageSessionDuration():
     client = BetaAnalyticsDataClient()
@@ -153,13 +148,14 @@ def getYesterdayAverageSessionDuration():
     )
 
     response = client.run_report(request)
-    message = ""
+    mainVC_time = "당일 메인화면 평균 체류시간: 0분 0초\n"
+    settingVC_time = "당일 설정화면 평균 체류시간: 0분 0초\n"
     for row in response.rows:
         if row.dimension_values[0].value == "MainViewController":
-            message += f"  전일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
+            mainVC_time = f"  전일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
         if row.dimension_values[0].value == "SettingViewController":
-            message += f"  전일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
-    return message
+            settingVC_time = f"  전일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
+    return mainVC_time + settingVC_time
 
 
 def convertMinutes(value):
