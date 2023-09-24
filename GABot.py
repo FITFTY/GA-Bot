@@ -12,8 +12,6 @@ bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 @bot.event
 async def on_ready():
     print(f'Bot connected: {bot.user.name}')
-    print(message_yesterday_data())
-
     send_message_8am.start()
 
 @bot.event
@@ -38,7 +36,7 @@ async def send_message_8am():
 def message_yesterday_data():
       today = datetime.date.today()
       yesterday = today - timedelta(days=1)
-     # userList = totalUser.getTotalUser()
+      userList = totalUser.getTotalUser()
       message = ("===========================================\n"
                 f"  {yesterday} 기준\n\n"
                 f"  어제 DAU: {GA.getYesterdayDAU()}\n"
@@ -46,9 +44,9 @@ def message_yesterday_data():
                 f"{GA.getCurrentMonthMAU()}"
                 f"{GA.get30daysMonthMAU()}\n"
                 f"{GA.getYesterdayAverageSessionDuration()}\n"
-              #  f"  누적 가입자수: {userList['totalUser']}\n"
-              #  f"  누적 여성 가입자수: {userList['totalFemaleUser']}\n"
-              #  f"  누적 남성 가입자수: {userList['totalMaleUser']}\n"
+                f"  누적 가입자수: {userList['totalUser']}\n"
+                f"  누적 여성 가입자수: {userList['totalFemaleUser']}\n"
+                f"  누적 남성 가입자수: {userList['totalMaleUser']}\n"
                 "===========================================\n")
       return message
       
