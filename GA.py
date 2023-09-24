@@ -52,7 +52,7 @@ def getYesterdayDAU():
     return dau
 
 
-def getYesterdayMAU():
+def getCurrentMonthMAU():
     client = BetaAnalyticsDataClient()
 
     today = date.today()
@@ -77,15 +77,15 @@ def getYesterdayMAU():
     for row in response.rows:
         mau = row.metric_values[0].value
      
-    return mau
+    return f"  {yesterday.month}월 누적 MAU: {mau}\n"
 
-def getTodayMAU():
+def getPrevicousMonthMAU():
     client = BetaAnalyticsDataClient()
 
     today = date.today()
-    first_day_of_month = date(today.year, today.month, 1).isoformat()
-    last_day_of_month = date(today.year, today.month, today.day).isoformat()
-
+    first_day_of_previous_month = today.replace(day=1) - timedelta(days=1)
+    first_day_of_month = date(first_day_of_previous_month.year, first_day_of_previous_month.month, 1).isoformat()
+    last_day_of_month = first_day_of_previous_month.isoformat()
     request = RunReportRequest(
         property=secret.GA_property,
         # 측정기준
@@ -103,7 +103,29 @@ def getTodayMAU():
     for row in response.rows:
         mau = row.metric_values[0].value
      
-    return mau
+    return f"  {first_day_of_previous_month.month}월 누적 MAU: {mau}\n"
+
+def get30daysMonthMAU():
+    client = BetaAnalyticsDataClient()
+
+    request = RunReportRequest(
+        property=secret.GA_property,
+        # 측정기준
+        dimensions=[
+        ],
+        # 측정항목
+        metrics=[
+            Metric(name="activeUsers")
+        ],
+        date_ranges=[DateRange(start_date="30daysAgo", end_date="1daysAgo")],
+    )
+
+    response = client.run_report(request)
+    mau = 0
+    for row in response.rows:
+        mau = row.metric_values[0].value
+     
+    return f"  최근 30일 MAU: {mau}\n"
 
 
 def getTodayAverageSessionDuration():
@@ -123,8 +145,8 @@ def getTodayAverageSessionDuration():
 
     response = client.run_report(request)
     
-    mainVC_time = "당일 메인화면 평균 체류시간: 0분 0초\n"
-    settingVC_time = "당일 설정화면 평균 체류시간: 0분 0초\n"
+    mainVC_time = "  당일 메인화면 평균 체류시간: 0분 0초\n"
+    settingVC_time = "  당일 설정화면 평균 체류시간: 0분 0초\n"
     for row in response.rows:
         if row.dimension_values[0].value == "MainViewController":
             mainVC_time = f"  당일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
@@ -148,13 +170,13 @@ def getYesterdayAverageSessionDuration():
     )
 
     response = client.run_report(request)
-    mainVC_time = "당일 메인화면 평균 체류시간: 0분 0초\n"
-    settingVC_time = "당일 설정화면 평균 체류시간: 0분 0초\n"
+    mainVC_time = "  어제 메인화면 평균 체류시간: 0분 0초\n"
+    settingVC_time = "  어제 설정화면 평균 체류시간: 0분 0초\n"
     for row in response.rows:
         if row.dimension_values[0].value == "MainViewController":
-            mainVC_time = f"  전일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
+            mainVC_time = f"  어제 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
         if row.dimension_values[0].value == "SettingViewController":
-            settingVC_time = f"  전일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
+            settingVC_time = f"  어제 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
     return mainVC_time + settingVC_time
 
 
