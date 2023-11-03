@@ -148,7 +148,7 @@ def getTodayAverageSessionDuration():
     mainVC_time = "  당일 메인화면 평균 체류시간: 0분 0초\n"
     settingVC_time = "  당일 설정화면 평균 체류시간: 0분 0초\n"
     for row in response.rows:
-        if row.dimension_values[0].value == "MainViewController":
+        if row.dimension_values[0].value == "MainView":
             mainVC_time = f"  당일 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
         if row.dimension_values[0].value == "SettingViewController":
             settingVC_time = f"  당일 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
@@ -173,7 +173,7 @@ def getYesterdayAverageSessionDuration():
     mainVC_time = "  어제 메인화면 평균 체류시간: 0분 0초\n"
     settingVC_time = "  어제 설정화면 평균 체류시간: 0분 0초\n"
     for row in response.rows:
-        if row.dimension_values[0].value == "MainViewController":
+        if row.dimension_values[0].value == "MainView":
             mainVC_time = f"  어제 메인화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}\n"
         if row.dimension_values[0].value == "SettingViewController":
             settingVC_time = f"  어제 설정화면 평균 체류시간: {convertMinutes(row.metric_values[0].value)}"
