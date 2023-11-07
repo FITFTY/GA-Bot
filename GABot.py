@@ -37,7 +37,7 @@ def message_yesterday_data():
       today = datetime.date.today()
       yesterday = today - timedelta(days=1)
       userList = totalUser.getTotalUser()
-      message = ("===========================================\n"
+      message = (
                 f"  {yesterday} 기준\n\n"
                 f"  어제 DAU: {GA.getYesterdayDAU()}\n"
                 f"{GA.getPrevicousMonthMAU()}"
@@ -46,20 +46,20 @@ def message_yesterday_data():
                 f"{GA.getYesterdayAverageSessionDuration()}\n"
                 f"  누적 가입자수: {userList['totalUser']}\n"
                 f"  누적 여성 가입자수: {userList['totalFemaleUser']}\n"
-                f"  누적 남성 가입자수: {userList['totalMaleUser']}\n"
-                "===========================================\n")
+                f"  누적 남성 가입자수: {userList['totalMaleUser']}"
+               )
       return message
       
 def message_today_data():
       userList = totalUser.getTotalUser()
-      message = ("===========================================\n"
+      message = (
                 f"  당일 DAU: {GA.getTodayDAU()}\n"
                 f"  당월 누적 MAU: {GA.getTodayMAU()}\n"
                 f"{GA.getTodayAverageSessionDuration()}\n"
                 f"  누적 가입자수: {userList['totalUser']}\n"
                 f"  누적 여성 가입자수: {userList['totalFemaleUser']}\n"
-                f"  누적 남성 가입자수: {userList['totalMaleUser']}\n"
-                "===========================================\n")
+                f"  누적 남성 가입자수: {userList['totalMaleUser']}"
+                )
       return message
 
 bot.run(secret.bot_token)
