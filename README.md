@@ -7,7 +7,7 @@ $ . venv/bin/activate
 
 $ pip install -r ./requirements.txt 
 
-$ date -- utc 인 경우 바꿔줘야 함
+$ date # utc 인 경우 바꿔줘야 함
 
 $ sudo ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime 
 
