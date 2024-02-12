@@ -13,4 +13,4 @@ $ sudo ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 $ date # kst 확인
 
-$ nohup python3 GA.py 1>/dev/null 2>&1 &
+$ nohup python3 GABot.py 1>/dev/null 2>&1 &
